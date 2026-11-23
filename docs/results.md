@@ -91,6 +91,8 @@ What this does and does not show:
 
 The ESP32 continuous ADC driver returns the samples of each pair swapped (0 and 1, 2 and 3, and so on). On a tone this appears as a zigzag in the consecutive differences, about -d, +3d instead of a steady d; for example about -10 and +34 counts at 1 kHz. Amplitude read from swapped data is wrong, with the mirror amplitude proportional to |tan(2 pi f / fs)|. The script checks the order on a clean 1 kHz tone at the start of every run and aborts if it is not the expected swap mode. It passed on every run that reached that step. True sample rate: 80,000 Hz.
 
+Effect on the filter measurement, from the saved per-capture data of the three 22 Nov runs (gain 2, 2 to 25 kHz, against the calculation): using the samples as delivered, the worst gap is 8.5 to 8.6 dB (at 15 kHz); after the swap-back it is 0.28 to 0.37 dB.
+
 ## 3. Hardware-in-the-loop timing
 
 A single-gain sweep (10 frequencies, 3 repeats, 30 captures of 8192 samples) took 61.8 s of captures, 2.06 s per capture; 70.6 s from start to finished plot without the 15 s countdown, 85.7 s with it. A manual sweep was never timed, so no manual-versus-automated ratio is claimed.
