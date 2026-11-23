@@ -1,0 +1,56 @@
+{
+  "run_id": "20261122_223312",
+  "firmware": "acoustic_hil_1.1",
+  "source": "HARDWARE",
+  "warnings": [],
+  "timing": {
+    "countdown_s": 15.061802832991816,
+    "total_excluding_countdown_s": 36.42300825001439,
+    "connect_s": 5.062891082983697,
+    "order_check_s": 17.997822792007355,
+    "sweeps_s": 20.622869417013135,
+    "outputs_s": 7.801227165997261,
+    "total_start_to_plot_s": 51.48481108300621,
+    "captures": 10,
+    "seconds_per_capture": 2.0622869417013137,
+    "settle_ms": 300,
+    "baud": 115200,
+    "n_samples": 8192,
+    "gains": [
+      2
+    ],
+    "reps": 1,
+    "freqs": 10,
+    "source": "HARDWARE",
+    "serial_retries": 0
+  },
+  "args": {
+    "port": "/dev/cu.usbserial-0001",
+    "baud": 115200,
+    "config": "/Users/jonathan/Downloads/hil/hil_config.json",
+    "gains": [
+      2
+    ],
+    "amp": null,
+    "reps": 1,
+    "n_samples": 8192,
+    "settle_ms": 300,
+    "limit_db": 0.5,
+    "limited_counts": 5.0,
+    "clip_lo": 150,
+    "clip_hi": 3700,
+    "ref_hz": 1000.0,
+    "freqs": null,
+    "expect_swap_mode": 1,
+    "known_rolloff_gains": [
+      3
+    ],
+    "countdown": 15,
+    "outdir": "hil_results",
+    "manual_minutes": null
+  },
+  "order_check": {
+    "mode": 1,
+    "message": "sample order check passed: swap mode 1; roughness as delivered 37.32, swap(0,1) 4.50, swap(1,2) 73.83; diffs [-14, 37, -10, 39, -14, 36, -11, 32, -10, 31] vs predicted -13.0/+39.1"
+  }
+}
