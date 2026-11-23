@@ -24,6 +24,10 @@ Transfers of 32 KB captures lost bytes at 460800 baud (113 bytes missing) and 92
 - GPIO19 (gain select A1) had a solder bridge. TODO: add what it caused and how it was found.
 - Bias network: with the capsule plugged in, the bias node read about 2.6 V against 2.64 to 2.69 V calculated (two-digit multimeter reading), and with the capsule unplugged TP1 read 3.3 V. A leak was suspected; the root cause is not proven. TODO: add the flux-residue finding.
 
-## 6. Scope
+## 6. Check the calculation's inputs against the design files
+
+The first comparison of measurement against calculation reported agreement within 0.36 dB. The calculation had been built from component values that were not the ones in the schematic and bill of materials. When the values were read from the netlist and the BOM (12 kohm and 5.1 kohm resistors, 470 pF and 3.3 nF capacitors), the same measurements were within 0.35 dB up to 25 kHz and 0.78 dB at 55 kHz, still inside the tolerance band but not as tight. The summaries and plots were regenerated from the unchanged raw logs, and the repository history shows both versions. A calculation is only a check if its inputs come from the design files, not from memory.
+
+## 7. Scope
 
 A claim is only as strong as its comparison with a calculation. Several early numbers were dropped because they were not compared with anything, or were measured in a state that could not be reproduced.

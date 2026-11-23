@@ -18,7 +18,7 @@ def _sk_db(f, r, cfb, cg):
 
 
 def _calc_db(f):
-    return _sk_db(f, 3920.0, 1.8e-9, 1.5e-9) + _sk_db(f, 2430.0, 6.8e-9, 1.0e-9)
+    return _sk_db(f, 12000.0, 470e-12, 470e-12) + _sk_db(f, 5100.0, 3.3e-9, 470e-12)
 
 
 class MockSerial:

@@ -6,7 +6,7 @@ An electret-microphone measurement front end (custom KiCad board) with an ESP32 
 
 ## Signal chain
 
-WM-61B capsule -> bias network -> OPA2365 preamp with TMUX1104 gain select (nominal gains 1, 10.1, 101, 1001) -> two Sallen-Key low-pass sections (calculated -3 dB at 25.02 kHz) -> ESP32 ADC on GPIO34, 80 kSPS, continuous mode.
+WM-61B capsule -> bias network -> OPA2365 preamp with TMUX1104 gain select (nominal gains 1, 10.1, 101, 1001) -> two Sallen-Key low-pass sections (calculated -3 dB at 25.5 kHz) -> ESP32 ADC on GPIO34, 80 kSPS, continuous mode.
 
 Test points on the board: TP1 MIC_OUT, TP2 MIC_IN, TP3 VREF, TP4 PRE_OUT, TP5 O1, TP6 ADC_IN, TP7 VCCA, TP8 GND.
 
@@ -17,8 +17,8 @@ Every number here was measured and compared against a calculation. Full tables a
 | Result | Status |
 |---|---|
 | ESP32 ADC returns sample pairs swapped; swap-back verified; checked automatically at the start of every run | VALID |
-| Filter response at gain 2, 1 to 55 kHz vs calculation: within 0.36 dB on three runs (22 Nov), within 1.23 dB on two later runs (23 Nov) | PROVISIONAL: the injected signal level drifted between days |
-| The drift is upstream of the filter (5 to 55 kHz shape still matches calculation to 0.3 dB or better) | diagnosis, cause not found |
+| Filter response at gain 2, 1 to 55 kHz vs calculation: inside the tolerance band at all 9 points on three runs (22 Nov), within 0.35 dB up to 25 kHz and 0.78 dB at worst; two later runs (23 Nov) were worse, up to 1.9 dB | PROVISIONAL: the injected signal level drifted between days |
+| The 23 Nov drift is upstream of the filter (above 5 kHz the tone is lower by a nearly constant factor, with the same 5 to 55 kHz shape as on 22 Nov) | diagnosis, cause not found |
 | Gain steps, noise, dynamic range from earlier manual runs | PROVISIONAL |
 | Gain 1 and gain 3 filter response | NOT MEASURED |
 
