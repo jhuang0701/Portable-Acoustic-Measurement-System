@@ -32,7 +32,7 @@ Find the port with `ls /dev/cu.*` (something like `/dev/cu.usbserial-0001` or `/
 python3 hil_sweep.py --port /dev/cu.usbserial-0001 --gains 2 --reps 3 --countdown 15 --baud 115200 --n-samples 8192 --settle-ms 300
 ```
 
-These options are the ones that worked on the author's board and USB-serial link (see Known issues in the top-level README).
+These options are the ones that worked on the author's board and USB-serial link (see docs/known-issues.md).
 
 Defaults: gains 1 and 2, 3 sweeps, frequencies from the config (1, 2, 5, 10, 15, 20, 25, 30, 38, 55 kHz, 1 kHz is the reference),
 460800 baud (the board starts at 115200 and the script switches it). On the author's link bulk transfers lost bytes at 460800 and 921600 and were reliable only at 115200, so use `--baud 115200`. Captures are read back in 1 KB chunks, each checked and re-requested if it arrives short; the retry count is printed.
