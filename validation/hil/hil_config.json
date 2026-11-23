@@ -1,0 +1,100 @@
+{
+  "description": "Calculated (netlist, analytic) and analytic Monte Carlo band of the anti-alias filter, dB relative to the 1 kHz response. NOT ngspice.",
+  "reference_hz": 1000,
+  "freqs_hz": [
+    1000,
+    2000,
+    5000,
+    10000,
+    15000,
+    20000,
+    25000,
+    30000,
+    38000,
+    55000
+  ],
+  "calc_db": {
+    "1000": 0.0,
+    "2000": 0.001,
+    "5000": 0.005,
+    "10000": 0.009,
+    "15000": -0.064,
+    "20000": -0.672,
+    "25000": -2.987,
+    "30000": -7.2,
+    "38000": -14.672,
+    "55000": -27.434
+  },
+  "band_db": {
+    "1000": [
+      0.0,
+      0.0
+    ],
+    "2000": [
+      -0.009,
+      0.01
+    ],
+    "5000": [
+      -0.072,
+      0.081
+    ],
+    "10000": [
+      -0.266,
+      0.291
+    ],
+    "15000": [
+      -0.551,
+      0.447
+    ],
+    "20000": [
+      -1.362,
+      0.034
+    ],
+    "25000": [
+      -3.926,
+      -2.038
+    ],
+    "30000": [
+      -8.598,
+      -5.812
+    ],
+    "38000": [
+      -16.295,
+      -12.975
+    ],
+    "55000": [
+      -29.092,
+      -25.695
+    ]
+  },
+  "calc_minus3db_hz": 25020.0,
+  "band_method": "analytic Monte Carlo, 20000 runs, seed 12345, R +/-1% uniform, C +/-5% uniform, independent per component",
+  "sim_db": {
+    "20000": -0.66,
+    "25000": -3.3,
+    "100000": -48.0
+  },
+  "sim_note": "ngspice values the user has on file (only these three points); no ngspice Monte Carlo is on file",
+  "earlier_manual_db": {
+    "1": {
+      "2000": -0.44,
+      "5000": -0.8,
+      "10000": -0.93,
+      "15000": -1.03,
+      "20000": -1.42,
+      "25000": -4.16,
+      "30000": -8.44
+    },
+    "2": {
+      "5000": -0.54,
+      "10000": -0.74,
+      "15000": -0.87,
+      "20000": -1.29,
+      "25000": -3.75,
+      "30000": -7.9,
+      "38000": -15.2,
+      "55000": -27.41
+    }
+  },
+  "earlier_manual_note": "square-wave sweeps from the 2026-11-22 manual runs (v7q gain 2, v7h gain 1), relative to the 1 kHz reading"
+}
