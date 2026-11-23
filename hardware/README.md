@@ -1,9 +1,14 @@
 # Hardware files
 
-To be added:
+- [KiCad project](kicad/)
+- [Schematic PDF](docs/portable-acoustic-meter-schematic.pdf)
 
-- [ ] KiCad project (schematic, PCB, libraries)
-- [ ] Schematic PDF
-- [ ] PCB layout image
-- [ ] Photos of the assembled board and the bench setup
-- [ ] ngspice netlists and any Monte Carlo output
+## PCB views
+
+![Front PCB layout](docs/pcb-layout-front.png)
+
+![Back PCB layout](docs/pcb-layout-back.png)
+
+![PCB 3D render, angle 1](docs/pcb-3d-render-angle-1.png)
+
+![PCB 3D render, angle 2](docs/pcb-3d-render-angle-2.png)
