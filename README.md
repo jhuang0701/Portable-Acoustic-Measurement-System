@@ -1,10 +1,19 @@
 # Portable Acoustic Measurement System
 
-An electret-microphone measurement front end (custom KiCad board) with an ESP32 acquiring the signal, plus an automated Python test that checks the board's filter response against calculation.
+A portable acoustic measurement instrument I designed, built and validated: an electret-microphone analog front end on a custom 2-layer KiCad board, an ESP32 sampling at 80 kSPS, and an automated Python hardware-in-the-loop test that checks the board against its design calculations.
 
 <img src="hardware/photos/irl-board-angle.png" alt="Assembled acoustic meter board with ESP32 and electret capsule" width="560">
 
-**Status: hardware built and bench-tested; analog front end, acquisition, automated validation and an end-to-end acoustic test (phone sound source) are done. The PC visualisation app and calibrated room/speaker measurements are not built.** See [Known issues and not measured](docs/known-issues.md).
+## Highlights
+
+- **Analog front end, designed from scratch:** electret capsule bias network, OPA2365 preamp with four switchable gains (TMUX1104), and a 4th-order Sallen-Key anti-alias filter (calculated -3 dB at 25.5 kHz), hand-routed on a 2-layer mixed-signal PCB.
+- **Root-caused an 8.6 dB measurement error to the ESP32 ADC.** The continuous-mode driver returns every sample pair swapped. Undoing the swap brought the measured filter response within 0.37 dB of calculation through 25 kHz, and the test now checks sample order automatically before every run.
+- **Automated hardware-in-the-loop validation:** `hil_sweep.py` drives the board over serial, sweeps 1 to 55 kHz, and compares each point against the calculation and a Monte Carlo tolerance band. At gain x100 the response sat inside the band at every point, within 0.35 dB of calculation up to 25 kHz.
+- **End-to-end test on real sound:** with a phone as the source, measured level fell -5.46 dB per doubling of distance (inverse-square law predicts -6.02 dB), and 500 Hz to 4 kHz tones read within 0.014% of frequency, against pass criteria fixed before the data were taken.
+
+![Filter response before and after the ADC sample-pair fix](docs/img/swap-fix-before-after.png)
+
+*Gain 2, 22 Nov run. Red: samples as the ESP32 delivers them. Blue: after the pair swap-back. Generated from the saved per-capture log by [`plot_swap_effect.py`](validation/hil/plot_swap_effect.py); no value is re-measured.*
 
 ## Signal chain
 
@@ -12,7 +21,7 @@ WM-61B capsule -> bias network -> OPA2365 preamp with TMUX1104 gain select (nomi
 
 Test points on the board: TP1 MIC_OUT, TP2 MIC_IN, TP3 VREF, TP4 PRE_OUT, TP5 O1, TP6 ADC_IN, TP7 VCCA, TP8 GND.
 
-## What was tested, and how far it can be trusted
+## Validation status in detail
 
 Every number here was measured and compared against a calculation. Full tables and the status of each result are in [docs/results.md](docs/results.md).
 
@@ -39,6 +48,7 @@ The plot above is one run. The later runs that disagree are published beside it 
 | `validation/hil/results/` | Every hardware run: plot, per-capture log, summary and metadata, including bad runs |
 | `validation/hil/acoustic_results/` | Every real end-to-end acoustic run (phone as sound source), including the failed and inconclusive ones |
 | `docs/results.md` | Measured vs calculated, with status |
+| `docs/img/` | Figures used in this README |
 | `docs/lessons-learned.md` | What went wrong and what was learned |
 | `docs/known-issues.md` | Open problems, what was not measured, ideas for a second revision |
 | `hardware/photos/` | Photos of the assembled board: top-down and angled views |
