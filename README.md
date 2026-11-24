@@ -35,7 +35,8 @@ The plot above is one run. The later runs that disagree are published beside it 
 | `docs/results.md` | Measured vs calculated, with status |
 | `docs/lessons-learned.md` | What went wrong and what was learned |
 | `docs/known-issues.md` | Open problems, what was not measured, ideas for a second revision |
-| `hardware/` | Placeholders for the KiCad project, schematic, layout and photos (to be added) |
+| `hardware/photos/` | Photos of the assembled board: top-down and angled views |
+| `hardware/` | KiCad project, schematic and layout |
 
 ## Running the validation
 
