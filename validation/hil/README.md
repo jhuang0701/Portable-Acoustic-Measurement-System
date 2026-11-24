@@ -10,6 +10,7 @@ sample-pair swap, measures the amplitude, normalises to 1 kHz and compares every
 | `acoustic_hil/acoustic_hil.ino` | firmware with the serial command protocol |
 | `hil_sweep.py` | the test script |
 | `make_config.py` | writes `hil_config.json` (calculated response and tolerance band) |
+| `reanalyze.py` | re-evaluates saved runs against the current `hil_config.json` |
 | `hil_config.json` | the tables the script reads (nothing is hard-coded in the script) |
 | `mock_device.py` | SIMULATED board for testing the script without hardware. Its numbers are never measurements |
 
@@ -74,12 +75,29 @@ Opening the port usually resets the ESP32; the script waits for it to boot. If a
 ## Where the numbers in `hil_config.json` come from
 
 `python3 make_config.py` regenerates it.
-- `calc_db`: analytic, from the KiCad netlist values (stage 1: R 3.92k, Cfb 1.8n, Cg 1.5n; stage 2: R 2.43k, Cfb 6.8n, Cg 1.0n). -3 dB at 25.02 kHz.
+- `calc_db`: analytic, from the schematic and bill of materials in `hardware/kicad` (stage 1: RA1 = RA2 = 12k, CA2 470p feedback, CA1 470p ground; stage 2: RA3 = RA4 = 5.1k, CA4 3.3n feedback, CA3 470p ground; then R_ISO1 10 ohm into C_ADC1 100n). -3 dB at 25.49 kHz. Not included: op-amp gain-bandwidth, the preamp's own bandwidth, the ADC sample-and-hold, parasitics.
 - `band_db`: an **analytic** Monte Carlo (20,000 runs, fixed seed, every R uniform +/-1 %, every C uniform +/-5 %), **not an ngspice run**.
-  It differs by up to 0.07 dB from the band quoted in the earlier results document (different random draws). Use this file's band from now on.
-  If you have ngspice Monte Carlo output, paste it into `band_db` (and `calc_db`); the script only reads the file.
+    If you have ngspice Monte Carlo output, paste it into `band_db` (and `calc_db`); the script only reads the file.
 - `sim_db`: the three ngspice points on file (20 kHz -0.66, 25 kHz -3.3, 100 kHz -48.0). Shown in the plot and CSV.
 - `earlier_manual_db`: the square-wave manual runs of 2026-11-22 (gain 2: v7q, gain 1: v7h).
+
+## End-to-end acoustic test
+
+`acoustic_test.py` checks the whole chain with a real sound: a phone plays pure tones into the capsule at set distances. It needs no calibration and no electrical injection (remove the jumpers from GPIO25 first). The pass criteria are fixed in the script before any data is taken and are saved with every run:
+
+- the level falls 6.02 dB per doubling of distance (10, 20, 40 cm), within 1.5 dB per doubling, and a repeat at 10 cm agrees within 1 dB;
+- the measured frequency is within 0.2 % of the set frequency (500, 1000, 2000, 4000 Hz);
+- every tone is at least 20 dB above the silence floor.
+
+```
+python3 acoustic_test.py --port /dev/cu.usbserial-0001 --baud 115200
+```
+
+Limits: distances are measured by ruler (an error of 5 mm at 10 cm is 0.4 dB), the phone speaker is not a point source and the room adds reflections. A pass shows that sound reaches the ADC as a correctly scaled, correctly timed signal; it is not a calibration (no dB SPL).
+
+## Re-evaluating saved runs
+
+If the calculation changes (edit `make_config.py`, run it), `python3 reanalyze.py results/` rewrites every summary, plot and the calc/band columns of every log from the saved per-capture measurements. The measured amplitudes are never modified. The runs in `results/` were re-evaluated this way on 23 Nov 2026 after the calculation was corrected to the schematic values.
 
 ## Testing without hardware
 
@@ -91,3 +109,10 @@ and the CSV has `source=MOCK`. The mock contains an invented passband tilt so th
 Checks: the sample order (pair swap) at the start; the filter response of the whole chain (injection network, preamp, filter, ADC) from 1 to 55 kHz against the calculation and tolerance band, with repeat spread.
 Cannot check: the filter alone (the preamp, the injection network and the ADC are in every point), anything above 40 kHz without aliasing (55 kHz is measured as its 25 kHz alias),
 noise or distortion, the capsule, or whether the order check still holds mid-run (it runs once, at the start).
+
+
+## Acoustic end-to-end tests
+
+- `acoustic_noise_test.py`: noise-band level against distance (10/20/30/10 cm), pass criteria fixed in the script. Use this for the level check. `python3 acoustic_noise_test.py --port /dev/cu.usbserial-0001 --baud 115200`
+- `acoustic_test.py`: pure-tone version (level and 500/1000/2000/4000 Hz read-out). `--level-only` repeats only the level section. The pure-tone level section did not give a stable result in a room (see docs/results.md section 7); the frequency read-out did.
+- `acoustic_results/`: logs, metadata and plots of every real run. `--port mock` runs a simulated board labelled SIMULATED, never a measurement.

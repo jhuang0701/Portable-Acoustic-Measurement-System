@@ -8,6 +8,7 @@
 4. **Occasional board resets** were seen around port opens and jumper handling. Cause not proven.
 5. **Bias leak.** TP1 read 3.3 V with the capsule unplugged; the biased node read about 2.6 V with the capsule plugged in, against 2.64 to 2.69 V calculated. Root cause not proven.
 6. **The Monte Carlo tolerance band is analytic, not ngspice.** Only three ngspice points are on file (20 kHz -0.66 dB, 25 kHz -3.3 dB, 100 kHz -48.0 dB).
+7. **The first published comparison used the wrong filter values.** The calculation had been built from values that are not in the schematic or the bill of materials. It was corrected on 23 Nov to the schematic values and every summary and plot was regenerated from the unchanged raw logs. The calculation still leaves out op-amp gain-bandwidth, the preamp's own bandwidth and the ADC sample-and-hold, which may explain why the measured response falls slightly faster than calculated above 25 kHz (0.44 to 0.78 dB at 30 to 55 kHz). That is not tested.
 
 ## Not measured
 

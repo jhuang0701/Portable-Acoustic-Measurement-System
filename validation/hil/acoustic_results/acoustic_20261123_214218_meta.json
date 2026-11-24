@@ -1,0 +1,45 @@
+{
+ "run_id": "20261123_214218",
+ "firmware": "acoustic_hil_1.1",
+ "source": "HARDWARE",
+ "criteria": {
+  "gain": 2,
+  "distances_cm": [
+   10,
+   20,
+   40,
+   10
+  ],
+  "captures_per_distance": 3,
+  "level_tone_hz": 1000.0,
+  "freq_tones_hz": [
+   500.0,
+   2000.0,
+   4000.0
+  ],
+  "freq_captures": 2,
+  "n_samples_level": 8192,
+  "n_samples_freq": 16384,
+  "expected_db_per_doubling": -6.020599913279624,
+  "slope_tolerance_db": 1.5,
+  "repeat_tolerance_db": 1.0,
+  "freq_tolerance_fraction": 0.002,
+  "min_snr_db": 20.0,
+  "level_ok_counts": [
+   40.0,
+   450.0
+  ],
+  "mean_ok_counts": [
+   1500.0,
+   1900.0
+  ]
+ },
+ "notes": [],
+ "result": "\nLEVEL AGAINST DISTANCE (gain setting 2, 1000 Hz)\n  distance_cm   mean_counts   level_re_10cm_dB   expected_dB   spread_of_3_dB\n           10         200.6               0.00         -0.00             0.28\n           20          40.7             -13.85         -6.02             0.52\n           40          35.0             -15.17        -12.04             0.56\n  repeat at 10 cm: -0.56 dB against the first 10 cm run (limit +/-1.0)\n  fitted slope -7.58 dB per doubling (+/-1.37 fit), expected -6.02, difference -1.56 (limit +/-1.5)\n  level against distance: FAIL\n\nFREQUENCY READ-OUT\n  f_set_Hz   f_measured_Hz (mean of reps)   error_Hz   error_%    limit_%   status\n       500                        499.89      -0.11    -0.023      0.20   PASS\n      1000                        892.71    -107.29   -10.729      0.20   FAIL\n      2000                       2000.00      +0.00    +0.000      0.20   PASS\n      4000                       3999.94      -0.06    -0.001      0.20   PASS\n\nSIGNAL ABOVE SILENCE: smallest tone-to-floor ratio 9.6 dB (need 20): FAIL\n\nEND-TO-END RESULT: NOT PASSED: level: FAIL; frequency; signal level",
+ "level_status": "FAIL",
+ "overall_pass": false,
+ "slope_db_per_doubling": -7.58486344592526,
+ "slope_fit_se": 1.3708151961995967,
+ "repeat_10cm_db": -0.5644367729255251,
+ "silence_rms_counts": 45.58029241490442
+}

@@ -1,0 +1,43 @@
+{
+ "run_id": "noise_20261123_223631",
+ "test": "noise-band level",
+ "firmware": "acoustic_hil_1.1",
+ "source": "HARDWARE",
+ "criteria": {
+  "gain": 2,
+  "distances_cm": [
+   10,
+   20,
+   30,
+   10
+  ],
+  "captures_per_distance": 3,
+  "n_samples": 16384,
+  "band_hz": [
+   891.0,
+   1122.0
+  ],
+  "expected_db_per_doubling": -6.020599913279624,
+  "slope_tolerance_db": 1.5,
+  "repeat_tolerance_db": 1.0,
+  "min_snr_db": 20.0,
+  "level_ok_rms": [
+   30.0,
+   300.0
+  ],
+  "mean_ok_counts": [
+   1500.0,
+   1900.0
+  ],
+  "max_capture_spread_db": 3.0
+ },
+ "notes": [],
+ "result": "\nNOISE-BAND LEVEL AGAINST DISTANCE (gain 2, band 891-1122 Hz)\n  distance_cm   in-band_rms_counts   level_re_10cm_dB   expected_dB   spread_of_3_dB\n           10                 46.0               0.00         -0.00             1.44\n           20                 23.7              -5.75         -6.02             0.85\n           30                 17.2              -8.53         -9.54             2.52\n  repeat at 10 cm: -0.33 dB against the first 10 cm set (limit +/-1.0)\n  fitted slope -5.46 dB per doubling (+/-0.43 fit), expected -6.02, difference +0.56 (limit +/-1.5)\n  largest spread of 3 captures at one position: 2.52 dB (limit 3.0)\n  level against distance: PASS\n\nSIGNAL ABOVE SILENCE (in band): smallest ratio 35.5 dB (need 20): PASS\n\nNOISE-BAND LEVEL RESULT: PASS (all criteria met)",
+ "level_status": "PASS",
+ "overall_pass": true,
+ "slope_db_per_doubling": -5.459387226962131,
+ "slope_fit_se": 0.4289526204937726,
+ "repeat_10cm_db": -0.333088215819096,
+ "silence_band_rms_counts": 0.2896973939378826,
+ "min_snr_db": 35.484685698515776
+}
