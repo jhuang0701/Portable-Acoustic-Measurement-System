@@ -94,8 +94,12 @@ def main():
     ap.add_argument("--baud", type=int, default=115200)
     ap.add_argument("--settle-s", type=float, default=1.0, help="wait after you press Enter before capturing")
     ap.add_argument("--outdir", default="acoustic_results")
+    ap.add_argument("--level-only", action="store_true",
+                    help="repeat only the level-against-distance section (no 500/2000/4000 Hz tones). Same criteria; the result is labelled LEVEL-ONLY and is not a full run")
     args = ap.parse_args()
-    C = CRITERIA
+    C = dict(CRITERIA)
+    if args.level_only:
+        C["freq_tones_hz"] = []
     sim = args.port == "mock"
     stamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
     run_id = ("MOCK_" if sim else "") + stamp
@@ -116,7 +120,7 @@ def main():
     print(f"  firmware {fw}")
     dev.cmd("STOP")
     dev.cmd(f"GAIN {C['gain']}")
-    meta = dict(run_id=run_id, firmware=fw, source="MOCK" if sim else "HARDWARE", criteria={k: (v.tolist() if hasattr(v, "tolist") else v) for k, v in C.items()}, notes=[])
+    meta = dict(level_only=bool(args.level_only), run_id=run_id, firmware=fw, source="MOCK" if sim else "HARDWARE", criteria={k: (v.tolist() if hasattr(v, "tolist") else v) for k, v in C.items()}, notes=[])
     rows = []
 
     # ---- 1. level check and sample order, tone at 10 cm
@@ -234,7 +238,11 @@ def main():
         out.append(f"  {f:8.0f}   {fm:27.2f}   {err:+8.2f}   {err / f * 100:+7.3f}   {C['freq_tolerance_fraction'] * 100:7.2f}   {'PASS' if ok else 'FAIL'}")
     out.append(f"\nSIGNAL ABOVE SILENCE: smallest tone-to-floor ratio {min_snr_all:.1f} dB (need {C['min_snr_db']:.0f}): {'PASS' if snr_ok else 'FAIL'}")
     overall = level_status == "PASS" and all(freq_status) and snr_ok
-    out.append("\nEND-TO-END RESULT: " + ("PASS (all criteria met)" if overall else "NOT PASSED: " + "; ".join(
+    if args.level_only:
+        out.append("\nLEVEL-ONLY RUN (frequency tones 500/2000/4000 Hz not repeated; take those from a full run)")
+        out.append("LEVEL SECTION RESULT: " + ("PASS" if (level_status == "PASS" and all(freq_status) and snr_ok) else "NOT PASSED: level: " + level_status if level_status != "PASS" else "NOT PASSED (1 kHz read-out or signal level)"))
+    else:
+      out.append("\nEND-TO-END RESULT: " + ("PASS (all criteria met)" if overall else "NOT PASSED: " + "; ".join(
         s for s in [("level: " + level_status) if level_status != "PASS" else "", "frequency" if not all(freq_status) else "", "signal level" if not snr_ok else ""] if s)))
     if sim:
         out.append("(SIMULATED data: not a measurement)")

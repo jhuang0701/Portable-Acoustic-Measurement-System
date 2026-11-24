@@ -117,3 +117,33 @@ Taken before the HIL tool existed. The hardware state at the time (a bias leak w
 | Dynamic range | at least 55.0 dB (54.2 to 55.7) | 70.4 dB ideal | PROVISIONAL, a lower bound limited by the source |
 | Reference voltage | 1.5 V | 1.500 V | multimeter, two digits |
 | Capsule noise in a room | about 50 dB SPL unweighted, +/-4 dB | none | room-limited, not a specification |
+
+## 7. End-to-end acoustic test (VALID for the stated scope, one room, one pass)
+
+A phone played the sound; the capsule, preamp (gain setting 2), filters, ESP32 ADC and the PC analysis measured it. The pass criteria are fixed in the scripts (`validation/hil/acoustic_test.py`, `validation/hil/acoustic_noise_test.py`) before data are taken. The raw logs, metadata and plots of every real run are in `validation/hil/acoustic_results/`.
+
+**Passing result: noise-band level against distance (run `noise_20261123_223631`, hardware, gain 2, band 891 to 1122 Hz, phone at 10/20/30 cm)**
+
+| Distance | In-band rms (counts) | Level re 10 cm | Expected (1/distance) |
+|---|---|---|---|
+| 10 cm | 46.0 | 0.00 dB | 0.00 dB |
+| 20 cm | 23.7 | -5.75 dB | -6.02 dB |
+| 30 cm | 17.2 | -8.53 dB | -9.54 dB |
+
+Fitted slope -5.46 dB per doubling (+/-0.43 fit), expected -6.02, limit +/-1.5: PASS. Repeat at 10 cm: -0.33 dB (limit 1.0): PASS. Smallest in-band level above the silence floor: 35.5 dB (need 20): PASS. Largest spread of three captures at one position: 2.52 dB (limit 3.0).
+
+**Frequency read-out (run `20261123_221455`, hardware, tones played from a phone at 10 cm):** 500, 1000, 2000 and 4000 Hz each read within 0.014 % of the set frequency (limit 0.2 %). The same run's level section was inconclusive (below), so the frequency result and the level result come from two different runs with the same gain and board, and they are reported as separate sections.
+
+**All real runs, in order. Nothing was deleted.**
+
+| Run | Stimulus | Result | Notes |
+|---|---|---|---|
+| `20261123_214218` | 1 kHz tone, 10/20/40/10 cm | FAIL | slope -7.58 dB per doubling; signal 9.6 dB above the floor in the final 10 cm repeat (a bump during capture); phone volume too low at distance |
+| `20261123_221455` | 1 kHz tone, full run | INCONCLUSIVE | slope -3.47; 10 cm repeat +1.05 dB (limit 1.0); frequency PASS at 500/1000/2000/4000 Hz; signal above floor PASS (21.5 dB) |
+| `20261123_222549` | 1 kHz tone, level only | INCONCLUSIVE | repeat -1.23 dB; one capture disturbed (mean 1886, rms 429); signal above floor FAIL (11.2 dB) |
+| `20261123_222833` | 1 kHz tone, level only | INCONCLUSIVE | repeat -2.28 dB; 40 cm captures only 4 to 15 counts; signal above floor FAIL (6.0 dB) |
+| `noise_20261123_223631` | 891 to 1122 Hz noise band, 10/20/30/10 cm | PASS | all criteria met |
+
+**Why the method changed.** Three pure-tone level runs gave level against distance that no free-field model produces: at 20 cm the level was 26 to 33 counts in one run and about 149 in another, and between positions it dropped 20 dB for a single doubling of distance. At 1 kHz the wavelength is about 34 cm, so with a single tone in a room, reflections interfere and a 1 cm position change moves the level by several dB. I replaced the tone with a one-third-octave band of noise, which averages that interference over many frequencies, and changed the distances to 10/20/30/10 cm because the ruler only reached 30 cm. The pass criteria (slope within 1.5 dB of -6.02, repeat within 1 dB, 20 dB above the silence floor) were not changed. I made this change after seeing the pure-tone results.
+
+**What this does and does not show.** It shows that level and tone frequency are read correctly through the whole chain, relative to a phone source. It is not an absolute sound-pressure calibration (no calibrated reference), the phone's tone frequency was not independently calibrated, and it is one pass in one room. One dataset labelled SIMULATED was produced by test code, is not a measurement, and is not included.

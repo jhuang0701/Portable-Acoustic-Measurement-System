@@ -109,3 +109,10 @@ and the CSV has `source=MOCK`. The mock contains an invented passband tilt so th
 Checks: the sample order (pair swap) at the start; the filter response of the whole chain (injection network, preamp, filter, ADC) from 1 to 55 kHz against the calculation and tolerance band, with repeat spread.
 Cannot check: the filter alone (the preamp, the injection network and the ADC are in every point), anything above 40 kHz without aliasing (55 kHz is measured as its 25 kHz alias),
 noise or distortion, the capsule, or whether the order check still holds mid-run (it runs once, at the start).
+
+
+## Acoustic end-to-end tests
+
+- `acoustic_noise_test.py`: noise-band level against distance (10/20/30/10 cm), pass criteria fixed in the script. Use this for the level check. `python3 acoustic_noise_test.py --port /dev/cu.usbserial-0001 --baud 115200`
+- `acoustic_test.py`: pure-tone version (level and 500/1000/2000/4000 Hz read-out). `--level-only` repeats only the level section. The pure-tone level section did not give a stable result in a room (see docs/results.md section 7); the frequency read-out did.
+- `acoustic_results/`: logs, metadata and plots of every real run. `--port mock` runs a simulated board labelled SIMULATED, never a measurement.
