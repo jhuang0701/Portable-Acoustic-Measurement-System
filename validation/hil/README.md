@@ -81,6 +81,20 @@ Opening the port usually resets the ESP32; the script waits for it to boot. If a
 - `sim_db`: the three ngspice points on file (20 kHz -0.66, 25 kHz -3.3, 100 kHz -48.0). Shown in the plot and CSV.
 - `earlier_manual_db`: the square-wave manual runs of 2026-11-22 (gain 2: v7q, gain 1: v7h).
 
+## End-to-end acoustic test
+
+`acoustic_test.py` checks the whole chain with a real sound: a phone plays pure tones into the capsule at set distances. It needs no calibration and no electrical injection (remove the jumpers from GPIO25 first). The pass criteria are fixed in the script before any data is taken and are saved with every run:
+
+- the level falls 6.02 dB per doubling of distance (10, 20, 40 cm), within 1.5 dB per doubling, and a repeat at 10 cm agrees within 1 dB;
+- the measured frequency is within 0.2 % of the set frequency (500, 1000, 2000, 4000 Hz);
+- every tone is at least 20 dB above the silence floor.
+
+```
+python3 acoustic_test.py --port /dev/cu.usbserial-0001 --baud 115200
+```
+
+Limits: distances are measured by ruler (an error of 5 mm at 10 cm is 0.4 dB), the phone speaker is not a point source and the room adds reflections. A pass shows that sound reaches the ADC as a correctly scaled, correctly timed signal; it is not a calibration (no dB SPL).
+
 ## Re-evaluating saved runs
 
 If the calculation changes (edit `make_config.py`, run it), `python3 reanalyze.py results/` rewrites every summary, plot and the calc/band columns of every log from the saved per-capture measurements. The measured amplitudes are never modified. The runs in `results/` were re-evaluated this way on 23 Nov 2026 after the calculation was corrected to the schematic values.
