@@ -21,8 +21,8 @@ Transfers of 32 KB captures lost bytes at 460800 baud (113 bytes missing) and 92
 ## 5. Other board and tooling issues found
 
 - Flash mode: the board needed Flash Mode DIO and Flash Frequency 40 MHz in the Arduino IDE (a fix found during bring-up).
-- GPIO19 (gain select A1) had a solder bridge. TODO: add what it caused and how it was found.
-- Bias network: with the capsule plugged in, the bias node read about 2.6 V against 2.64 to 2.69 V calculated (two-digit multimeter reading), and with the capsule unplugged TP1 read 3.3 V. A leak was suspected; the root cause is not proven. TODO: add the flux-residue finding.
+- GPIO19 (gain select A1) had a solder bridge. What it caused was not recorded.
+- Bias network: with the capsule plugged in, the bias node read about 2.6 V against 2.64 to 2.69 V calculated (two-digit multimeter reading), and with the capsule unplugged TP1 read 3.3 V. A leak was suspected; the root cause is not proven.
 
 ## 6. Check the calculation's inputs against the design files
 
